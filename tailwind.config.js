@@ -6,7 +6,17 @@ export default {
     ],
     darkMode: 'class',
     theme: {
-        extend: {},
+        extend: {
+            colors: {
+                app: 'var(--bg-app)',
+                card: 'var(--bg-card)',
+                main: 'var(--text-main)',
+                sub: 'var(--text-sub)',
+                border: 'var(--border-color)',
+                accent: 'var(--accent)',
+                'accent-light': 'var(--accent-light)',
+            }
+        },
     },
     plugins: [],
 }

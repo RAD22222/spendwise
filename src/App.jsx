@@ -45,8 +45,8 @@ export default function App() {
     return localStorage.getItem('spendwise_username') || 'Radit Anan';
   });
 
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    return localStorage.getItem('spendwise_darkmode') === 'true';
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('spendwise_theme') || 'light';
   });
 
   const [isEditingName, setIsEditingName] = useState(false);
@@ -79,14 +79,10 @@ export default function App() {
   }, [userName]);
 
   useEffect(() => {
-    localStorage.setItem('spendwise_darkmode', isDarkMode);
-    const root = window.document.documentElement;
-    if (isDarkMode) {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
-  }, [isDarkMode]);
+    localStorage.setItem('spendwise_theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.classList.remove('dark'); // Clean up legacy
+  }, [theme]);
 
   // Derived Balance Calculation
   const stats = useMemo(() => {
@@ -105,10 +101,7 @@ export default function App() {
 
   // --- Actions ---
 
-  const toggleDarkMode = () => {
-    vibrate();
-    setIsDarkMode(prev => !prev);
-  };
+
 
   const saveUserName = () => {
     setIsEditingName(false);
@@ -122,7 +115,7 @@ export default function App() {
       setTodos([]);
       setTransactions([]);
       setUserName('Radit Anan');
-      setIsDarkMode(false);
+      setTheme('light');
       setView('home');
       toast.success("App reset successfully");
       window.location.reload();
@@ -189,7 +182,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col items-center pb-24 transition-colors duration-300">
+    <div className="min-h-screen bg-app text-main flex flex-col items-center pb-24 transition-colors duration-300">
       {/* V3: Toaster at Bottom */}
       <Toaster
         position="bottom-center"
@@ -198,8 +191,8 @@ export default function App() {
         toastOptions={{
           style: {
             borderRadius: '16px',
-            background: isDarkMode ? '#1e293b' : '#fff',
-            color: isDarkMode ? '#fff' : '#333',
+            background: 'var(--bg-card)',
+            color: 'var(--text-main)',
             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
           },
         }}
@@ -265,8 +258,8 @@ export default function App() {
                 isEditingName={isEditingName}
                 setIsEditingName={setIsEditingName}
                 saveUserName={saveUserName}
-                isDarkMode={isDarkMode}
-                toggleDarkMode={toggleDarkMode}
+                theme={theme}
+                setTheme={setTheme}
                 setView={setView}
                 handleResetApp={handleResetApp}
               />
@@ -301,23 +294,23 @@ export default function App() {
 
       {/* Bottom Nav Mobile */}
       <div className="fixed bottom-0 left-0 right-0 p-4 sm:hidden pointer-events-none z-50">
-        <div className="max-w-xs mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-full p-2 flex justify-between items-center shadow-2xl pointer-events-auto">
+        <div className="max-w-xs mx-auto bg-card/90 backdrop-blur-xl border border-border/50 rounded-full p-2 flex justify-between items-center shadow-2xl pointer-events-auto">
 
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => { setView('home'); vibrate(); }}
-            className={`p-3 rounded-full transition-all relative ${view === 'home' ? 'bg-indigo-600 text-white shadow-indigo-500/50 shadow-lg' : 'text-slate-400'}`}
+            className={`p-3 rounded-full transition-all relative ${view === 'home' ? 'bg-accent text-white shadow-lg' : 'text-sub'}`}
           >
             <Home size={20} />
-            {view === 'home' && <motion.div layoutId="nav-pill" className="absolute inset-0 bg-indigo-600 rounded-full -z-10" />}
+            {view === 'home' && <motion.div layoutId="nav-pill" className="absolute inset-0 bg-accent rounded-full -z-10" />}
           </motion.button>
 
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => { setView('add-transaction'); vibrate(); }}
-            className="p-4 bg-indigo-600 text-white rounded-full -translate-y-4 border-4 border-slate-50 dark:border-slate-950 shadow-xl"
+            className="p-4 bg-accent text-white rounded-full -translate-y-4 border-4 border-app shadow-xl"
           >
             <Plus size={24} />
           </motion.button>
@@ -326,10 +319,10 @@ export default function App() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => { setView('profile'); vibrate(); }}
-            className={`p-3 rounded-full transition-all relative ${view === 'profile' ? 'bg-indigo-600 text-white shadow-indigo-500/50 shadow-lg' : 'text-slate-400'}`}
+            className={`p-3 rounded-full transition-all relative ${view === 'profile' ? 'bg-accent text-white shadow-lg' : 'text-sub'}`}
           >
             <Settings size={20} />
-            {view === 'profile' && <motion.div layoutId="nav-pill" className="absolute inset-0 bg-indigo-600 rounded-full -z-10" />}
+            {view === 'profile' && <motion.div layoutId="nav-pill" className="absolute inset-0 bg-accent rounded-full -z-10" />}
           </motion.button>
 
         </div>
