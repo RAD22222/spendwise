@@ -5,6 +5,7 @@ import {
   Home,
   Settings
 } from 'lucide-react';
+import toast, { Toaster } from 'react-hot-toast';
 
 import Navbar from './components/Navbar';
 import StatsCard from './components/StatsCard';
@@ -59,6 +60,11 @@ export default function App() {
   const [transAmount, setTransAmount] = useState('');
   const [transType, setTransType] = useState('expense');
 
+  // --- Utilities ---
+  const vibrate = () => {
+    if (navigator.vibrate) navigator.vibrate(50);
+  };
+
   // --- Persistence Effects ---
   useEffect(() => {
     localStorage.setItem('spendwise_todos', JSON.stringify(todos));
@@ -74,10 +80,11 @@ export default function App() {
 
   useEffect(() => {
     localStorage.setItem('spendwise_darkmode', isDarkMode);
+    const root = window.document.documentElement;
     if (isDarkMode) {
-      document.documentElement.classList.add('dark');
+      root.classList.add('dark');
     } else {
-      document.documentElement.classList.remove('dark');
+      root.classList.remove('dark');
     }
   }, [isDarkMode]);
 
@@ -99,33 +106,52 @@ export default function App() {
   // --- Actions ---
 
   const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
+    vibrate();
+    setIsDarkMode(prev => !prev);
   };
 
   const saveUserName = () => {
     setIsEditingName(false);
+    toast.success("Name updated!");
+  };
+
+  const handleResetApp = () => {
+    if (window.confirm("ARE YOU SURE? This will delete ALL your data permanently.")) {
+      vibrate();
+      localStorage.clear();
+      setTodos([]);
+      setTransactions([]);
+      setUserName('Radit Anan');
+      setIsDarkMode(false);
+      setView('home');
+      toast.success("App reset successfully");
+      window.location.reload();
+    }
   };
 
   const handleAddTodo = (e) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
+    vibrate();
 
     const newTodo = {
       id: Date.now().toString(),
       text: inputValue.trim(),
       completed: false,
-      createdAt: { seconds: Date.now() / 1000 } // Simulate Firestore timestamp structure for sorting
+      createdAt: { seconds: Date.now() / 1000 }
     };
 
     setTodos(prev => [newTodo, ...prev]);
     setInputValue('');
+    toast.success("Task added");
   };
 
   const handleSaveTransaction = () => {
     if (!transTitle || !transAmount) {
-      alert("Please enter a title and amount.");
+      toast.error("Please enter a title and amount.");
       return;
     }
+    vibrate();
 
     const newTrans = {
       id: Date.now().toString(),
@@ -142,22 +168,35 @@ export default function App() {
     setTransTitle('');
     setTransAmount('');
     setView('home');
+    toast.success("Transaction saved");
   };
 
   const toggleTodo = (id, completed) => {
+    vibrate();
     setTodos(prev => prev.map(t => t.id === id ? { ...t, completed: !completed } : t));
   };
 
   const deleteTodo = (id) => {
+    vibrate();
     setTodos(prev => prev.filter(t => t.id !== id));
+    toast.success("Task deleted");
   };
 
   const deleteTransaction = (id) => {
+    vibrate();
     setTransactions(prev => prev.filter(t => t.id !== id));
+    toast.success("Transaction deleted");
   };
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col items-center pb-24 transition-colors duration-300">
+      <Toaster position="top-center" reverseOrder={false} toastOptions={{
+        style: {
+          borderRadius: '16px',
+          background: isDarkMode ? '#1e293b' : '#fff',
+          color: isDarkMode ? '#fff' : '#333',
+        },
+      }} />
 
       <Navbar view={view} setView={setView} userInitials={userInitials} />
 
@@ -203,6 +242,7 @@ export default function App() {
                 isDarkMode={isDarkMode}
                 toggleDarkMode={toggleDarkMode}
                 setView={setView}
+                handleResetApp={handleResetApp}
               />
             </motion.div>
           )}
@@ -230,12 +270,12 @@ export default function App() {
       {/* Bottom Nav Mobile */}
       <div className="fixed bottom-0 left-0 right-0 p-4 sm:hidden pointer-events-none z-50">
         <div className="max-w-xs mx-auto bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-full p-2 flex justify-between items-center shadow-2xl pointer-events-auto">
-          <button onClick={() => setView('home')} className={`p-3 rounded-full transition-all ${view === 'home' ? 'bg-indigo-600 text-white' : 'text-slate-400'}`}><Home size={20} /></button>
-          <button onClick={() => setView('add-transaction')} className="p-4 bg-indigo-600 text-white rounded-full -translate-y-4 border-4 border-slate-50 dark:border-slate-950 transition-all hover:scale-110 active:scale-90"><Plus size={24} /></button>
-          <button onClick={() => setView('profile')} className={`p-3 rounded-full transition-all ${view === 'profile' ? 'bg-indigo-600 text-white' : 'text-slate-400'}`}><Settings size={20} /></button>
+          <button onClick={() => { setView('home'); vibrate(); }} className={`p - 3 rounded - full transition - all ${view === 'home' ? 'bg-indigo-600 text-white' : 'text-slate-400'} `}><Home size={20} /></button>
+          <button onClick={() => { setView('add-transaction'); vibrate(); }} className="p-4 bg-indigo-600 text-white rounded-full -translate-y-4 border-4 border-slate-50 dark:border-slate-950 transition-all hover:scale-110 active:scale-90"><Plus size={24} /></button>
+          <button onClick={() => { setView('profile'); vibrate(); }} className={`p - 3 rounded - full transition - all ${view === 'profile' ? 'bg-indigo-600 text-white' : 'text-slate-400'} `}><Settings size={20} /></button>
         </div>
       </div>
-      <style dangerouslySetInnerHTML={{ __html: `.no-scrollbar::-webkit-scrollbar { display: none; } body { overflow-x: hidden; }` }} />
+      <style dangerouslySetInnerHTML={{ __html: `.no - scrollbar:: -webkit - scrollbar { display: none; } body { overflow - x: hidden; } ` }} />
     </div>
   );
 }

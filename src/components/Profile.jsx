@@ -10,7 +10,9 @@ export default function Profile({
     saveUserName,
     isDarkMode,
     toggleDarkMode,
-    setView
+
+    setView,
+    handleResetApp
 }) {
     return (
         <div className="space-y-8">
@@ -35,7 +37,7 @@ export default function Profile({
                         <button onClick={() => setIsEditingName(true)} className="p-2 text-slate-400 hover:text-indigo-600"><Edit2 size={18} /></button>
                     </div>
                 )}
-                <p className="text-slate-400 text-sm mt-1">Student, Begum Rokeya University</p>
+
 
                 <div className="mt-10 space-y-4">
                     <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl">
@@ -49,6 +51,10 @@ export default function Profile({
                             <div className={`w-6 h-6 bg-white rounded-full shadow transition-all transform ${isDarkMode ? 'translate-x-6' : 'translate-x-0'}`} />
                         </button>
                     </div>
+
+                    <button onClick={handleResetApp} className="w-full p-4 bg-rose-50 text-rose-500 hover:bg-rose-100 dark:bg-rose-900/10 dark:hover:bg-rose-900/20 rounded-2xl font-bold transition-colors">
+                        Reset All Data
+                    </button>
                 </div>
             </div>
         </div>
