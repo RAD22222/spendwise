@@ -190,20 +190,34 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col items-center pb-24 transition-colors duration-300">
-      <Toaster position="top-center" reverseOrder={false} toastOptions={{
-        style: {
-          borderRadius: '16px',
-          background: isDarkMode ? '#1e293b' : '#fff',
-          color: isDarkMode ? '#fff' : '#333',
-        },
-      }} />
+      {/* V3: Toaster at Bottom */}
+      <Toaster
+        position="bottom-center"
+        reverseOrder={false}
+        containerStyle={{ bottom: 100 }}
+        toastOptions={{
+          style: {
+            borderRadius: '16px',
+            background: isDarkMode ? '#1e293b' : '#fff',
+            color: isDarkMode ? '#fff' : '#333',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+          },
+        }}
+      />
 
       <Navbar view={view} setView={setView} userInitials={userInitials} />
 
       <div className="w-full max-w-md p-4 sm:p-8 flex-1">
         <AnimatePresence mode="wait">
           {view === 'home' && (
-            <motion.div key="home" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
+            <motion.div
+              key="home"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="space-y-6"
+            >
               <StatsCard stats={stats} />
               <MonthSlider MONTHS={MONTHS} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} />
               <TodoList
@@ -220,7 +234,13 @@ export default function App() {
           )}
 
           {view === 'transactions' && (
-            <motion.div key="transactions" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+            <motion.div
+              key="transactions"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
               <TransactionList
                 transactions={transactions}
                 MONTHS={MONTHS}
@@ -231,7 +251,13 @@ export default function App() {
           )}
 
           {view === 'profile' && (
-            <motion.div key="profile" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+            <motion.div
+              key="profile"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 50 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
               <Profile
                 userInitials={userInitials}
                 userName={userName}
@@ -248,7 +274,13 @@ export default function App() {
           )}
 
           {view === 'add-transaction' && (
-            <motion.div key="add" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}>
+            <motion.div
+              key="add"
+              initial={{ opacity: 0, scale: 0.9, y: 100 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 100 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            >
               <AddTransaction
                 transTitle={transTitle}
                 setTransTitle={setTransTitle}
@@ -269,10 +301,37 @@ export default function App() {
 
       {/* Bottom Nav Mobile */}
       <div className="fixed bottom-0 left-0 right-0 p-4 sm:hidden pointer-events-none z-50">
-        <div className="max-w-xs mx-auto bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-full p-2 flex justify-between items-center shadow-2xl pointer-events-auto">
-          <button onClick={() => { setView('home'); vibrate(); }} className={`p - 3 rounded - full transition - all ${view === 'home' ? 'bg-indigo-600 text-white' : 'text-slate-400'} `}><Home size={20} /></button>
-          <button onClick={() => { setView('add-transaction'); vibrate(); }} className="p-4 bg-indigo-600 text-white rounded-full -translate-y-4 border-4 border-slate-50 dark:border-slate-950 transition-all hover:scale-110 active:scale-90"><Plus size={24} /></button>
-          <button onClick={() => { setView('profile'); vibrate(); }} className={`p - 3 rounded - full transition - all ${view === 'profile' ? 'bg-indigo-600 text-white' : 'text-slate-400'} `}><Settings size={20} /></button>
+        <div className="max-w-xs mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-full p-2 flex justify-between items-center shadow-2xl pointer-events-auto">
+
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => { setView('home'); vibrate(); }}
+            className={`p-3 rounded-full transition-all relative ${view === 'home' ? 'bg-indigo-600 text-white shadow-indigo-500/50 shadow-lg' : 'text-slate-400'}`}
+          >
+            <Home size={20} />
+            {view === 'home' && <motion.div layoutId="nav-pill" className="absolute inset-0 bg-indigo-600 rounded-full -z-10" />}
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => { setView('add-transaction'); vibrate(); }}
+            className="p-4 bg-indigo-600 text-white rounded-full -translate-y-4 border-4 border-slate-50 dark:border-slate-950 shadow-xl"
+          >
+            <Plus size={24} />
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => { setView('profile'); vibrate(); }}
+            className={`p-3 rounded-full transition-all relative ${view === 'profile' ? 'bg-indigo-600 text-white shadow-indigo-500/50 shadow-lg' : 'text-slate-400'}`}
+          >
+            <Settings size={20} />
+            {view === 'profile' && <motion.div layoutId="nav-pill" className="absolute inset-0 bg-indigo-600 rounded-full -z-10" />}
+          </motion.button>
+
         </div>
       </div>
       <style dangerouslySetInnerHTML={{ __html: `.no - scrollbar:: -webkit - scrollbar { display: none; } body { overflow - x: hidden; } ` }} />
