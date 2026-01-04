@@ -1,13 +1,71 @@
 @import "tailwindcss";
 
 @layer base {
+    :root {
+        /* Theme: Light - Warm/Earthy */
+        --bg-app: #FCF8F4;
+        /* Creamy White */
+        --bg-card: #FFFFFF;
+        /* Pure White */
+        --bg-highlight: #F2E6D9;
+        /* Soft Beige */
+
+        --text-main: #1c1917;
+        /* Almost Black (Stone 950) */
+        --text-sub: #57534e;
+        /* Dark Stone (Stone 600) */
+        --border-color: #d6d3d1;
+        /* Stone 300 */
+
+        --accent: #E67E22;
+        /* Deep Orange (Primary) */
+        --accent-brown: #8B4513;
+        /* Earthy Brown (Action) */
+        --accent-light: #FFF7ED;
+        /* Very Light Orange/Cream */
+    }
+
+    [data-theme='dark'] {
+        /* Theme: Dark - Deep Warm Brown/Black */
+        --bg-app: #1A1510;
+        /* Deep Brown/Black */
+        --bg-card: #241E19;
+        /* Darker Brown Card */
+        --bg-highlight: #2C2520;
+        /* Dark Highlight */
+
+        --text-main: #F2E6D9;
+        /* Beige Text */
+        --text-sub: #A89F91;
+        /* Muted Beige */
+        --border-color: #3D3228;
+
+        --accent: #F59E0B;
+        /* Lighter Amber for Dark Mode */
+        --accent-brown: #A05A2C;
+        /* Lighter Brown */
+        --accent-light: #2C2520;
+    }
 
     html,
     body {
+        background-color: var(--bg-app);
+        color: var(--text-main);
         overscroll-behavior-y: none;
-        /* Prevent pull-to-refresh bounce */
         user-select: none;
-        /* Prevent text highlighting */
         -webkit-tap-highlight-color: transparent;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
+}
+
+@theme {
+    --color-app: var(--bg-app);
+    --color-card: var(--bg-card);
+    --color-highlight: var(--bg-highlight);
+    --color-main: var(--text-main);
+    --color-sub: var(--text-sub);
+    --color-border: var(--border-color);
+    --color-accent: var(--accent);
+    --color-brown: var(--accent-brown);
+    --color-accent-light: var(--accent-light);
 }

@@ -15,8 +15,6 @@ export default function Profile({
 }) {
     const themes = [
         { id: 'light', name: 'Light', icon: Sun, color: 'bg-indigo-100 text-indigo-600' },
-        { id: 'off-white', name: 'Soft', icon: Scroll, color: 'bg-amber-100 text-amber-700' },
-        { id: 'gray', name: 'Gray', icon: Cloud, color: 'bg-slate-700 text-slate-200' },
         { id: 'dark', name: 'Dark', icon: Moon, color: 'bg-slate-900 text-indigo-400' },
     ];
 

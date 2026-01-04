@@ -310,7 +310,7 @@ export default function App() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => { setView('add-transaction'); vibrate(); }}
-            className="p-4 bg-accent text-white rounded-full -translate-y-4 border-4 border-app shadow-xl"
+            className="p-4 bg-brown text-white rounded-full -translate-y-4 border-4 border-app shadow-xl"
           >
             <Plus size={24} />
           </motion.button>

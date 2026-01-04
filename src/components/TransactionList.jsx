@@ -55,7 +55,7 @@ export default function TransactionList({ transactions, MONTHS, deleteTransactio
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <p className={`font-bold ${t.type === 'income' ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                            <p className={`font-bold ${t.type === 'income' ? 'text-emerald-600' : 'text-rose-600'}`}>
                                                 {t.type === 'income' ? '+' : '-'} ৳{t.amount?.toLocaleString()}
                                             </p>
                                             <button onClick={() => deleteTransaction(t.id)} className="p-2 text-sub hover:text-rose-500">

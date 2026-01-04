@@ -15,6 +15,8 @@ export default {
                 border: 'var(--border-color)',
                 accent: 'var(--accent)',
                 'accent-light': 'var(--accent-light)',
+                highlight: 'var(--bg-highlight)',
+                brown: 'var(--accent-brown)',
             }
         },
     },
